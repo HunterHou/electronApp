@@ -1,0 +1,15 @@
+{
+  "name": "electronapp",
+  "version": "1.0.0",
+  "description": "electron learning",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron",
+    "package":"electron-packager ./app 'electronapp' --platform=win32 --arch=x64 --icon=icon.ico --out=./out --asar --app-version=0.0.1"
+  },
+  "author": "hunter",
+  "license": "ISC",
+  "devDependencies":{
+    "electron":"v9.0.0"
+  }
+}
