@@ -1,10 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head> 
-      <meta charset="utf-8">
-      <title>hello world!</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>TestWorld!!!</title>
+    <script src="./vue/vue-dev.js"></script>
+    <script src="./element/index.js"></script>
+    <link rel="stylesheet" href="./element/index.css">
+    <script>
+      function reactText() {
+        var inStr = document.getElementById("input").value;
+        var outStr = "";
+        for (var i = 0; i < inStr.length; i++) {
+          var indexStr = inStr.substr(i, 1);
+          if (indexStr.indexOf("你") > -1) {
+            indexStr = "我";
+          } else if (indexStr.indexOf("我") > -1) {
+            indexStr = "你";
+          }
+          outStr += indexStr;
+        }
+        document.getElementById("output").value = outStr;
+      }
+    </script>
   </head>
   <body>
-      <h1>hello ,World</h1>
+    <div id="vueApp">
+      {{ message}}
+      <input-vue></input-vue>
+      <output-vue></output-vue>
+    </div>
+
+    <template id="inputTemplate">
+      <table>
+        <tr>
+          <td>选择</td>
+          <td><input type="file" id="file" @change="chooseFile(this)" /></td>
+        </tr>
+        <tr>
+          <td>你选择了</td>
+          <td>{{filename}}</td>
+        </tr>
+        <tr>
+          <td>input:</td>
+          <td>
+            <textarea
+              id="input"
+              onchange="reactText()"
+              style="width: 400px; height: auto; min-height: 250px;"
+            ></textarea>
+          </td>
+        </tr>
+      </table>
+    </template>
+
+    <template id="outTemplate">
+      <table>
+        <tr>
+          <td>output:</td>
+          <td>
+            <textarea id="output"
+              style="width: 400px; height: auto; min-height: 250px;"
+            ></textarea>
+          </td>
+        </tr>
+      </table>
+    </template>
+
+    <script>
+      var inputVue = {
+        template: "#inputTemplate",
+        data: function () {
+          return {
+            filename:"",
+          };
+        },
+        methods: {
+          chooseFile() {
+            var input =document.getElementById("file")
+            var reader = new FileReader();
+            var file = input.files[0];
+            reader.readAsText(file);
+            reader.onload = function () {
+              document.getElementById("input").value = this.result;
+              reactText();
+            };
+            this.filename=input.files[0].path
+            // document.getElementById("choose").innerText = input.files[0].path;
+          },
+        },
+      };
+      var outputVue = {
+        template: "#outTemplate",
+        // props:["context"],
+        data: function () {
+          return {};
+        },
+      };
+      //根组件 vue app
+      var app = new Vue({
+        el: "#vueApp",
+        components: {
+          "input-vue": inputVue,
+          "output-vue": outputVue,
+        },
+        data: {
+          message: "Hello,world",
+          outContext:"",  
+        },
+      });
+    </script>
   </body>
 </html>
